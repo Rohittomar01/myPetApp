@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextInput } from 'react-native-paper';
+import colors from '../utils/Colors';
 
 interface Props {
   label: string;
@@ -24,6 +25,8 @@ export default function CustomInput({
       mode="outlined"
       keyboardType={keyboardType}
       error={!!error}
+      outlineColor={error ? 'red' : colors.primary} // ✅ Normal border
+      activeOutlineColor={error ? 'red' : colors.primary} // ✅ Focus border
       style={{ marginBottom: 15 }}
     />
   );

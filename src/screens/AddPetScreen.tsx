@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, ScrollView, Image } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Toast from 'react-native-toast-message';
 
 import { petSchema, PetFormData } from '../utils/validation';
-import { submitPet } from '../api/petApi';
 import { usePetStore } from '../store/petStores';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
@@ -24,9 +23,15 @@ export default function AddPetScreen() {
     control,
     handleSubmit,
     formState: { errors },
-    reset, // ✅ add this
+    reset,
   } = useForm<PetFormData>({
     resolver: zodResolver(petSchema),
+    defaultValues: {
+      name: '',
+      breed: '',
+      age: '',
+      price: '',
+    },
   });
 
   const onSubmit = async (data: PetFormData) => {
@@ -41,11 +46,8 @@ export default function AddPetScreen() {
     try {
       setLoading(true);
 
-      // const response = await submitPet(data);
-      // console.log('Response from API:', response);
-
       const newPet = {
-        id: new Date().getTime().toString(),
+        id: Date.now().toString(),
         name: data.name,
         breed: data.breed,
         age: data.age,
@@ -53,6 +55,7 @@ export default function AddPetScreen() {
         image,
       };
 
+      // ✅ Add to Zustand global state
       addPet(newPet);
 
       Toast.show({
@@ -60,7 +63,8 @@ export default function AddPetScreen() {
         text1: 'Pet Added Successfully',
       });
 
-      // Optionally clear form
+      // ✅ Clear form & image
+      reset();
       setImage('');
     } catch (error) {
       console.log('Error submitting pet:', error);
@@ -69,7 +73,6 @@ export default function AddPetScreen() {
         text1: 'Something went wrong',
       });
     } finally {
-      reset();
       setLoading(false);
     }
   };
@@ -117,6 +120,25 @@ export default function AddPetScreen() {
           </Text>
 
           {/* Image Upload */}
+          {image && (
+            <View
+              style={{
+                marginTop: 15,
+                alignItems: 'center',
+              }}
+            >
+              <Image
+                source={{ uri: image }}
+                style={{
+                  width: '100%',
+                  height: 220,
+                  borderRadius: 20,
+                  bottom: 15,
+                }}
+                resizeMode="cover"
+              />
+            </View>
+          )}
           <ImageUploader onSelect={setImage} />
 
           <View style={{ marginTop: 15 }}>
@@ -130,7 +152,8 @@ export default function AddPetScreen() {
                     label="Pet Name"
                     value={field.value}
                     onChangeText={field.onChange}
-                    error={!!errors.name as any}
+                    error={!!errors.name}
+                    borderColor={errors.name ? 'red' : colors.secondary}
                   />
                   {errors.name && (
                     <Text style={{ color: 'red', fontSize: 12 }}>
@@ -151,7 +174,7 @@ export default function AddPetScreen() {
                     label="Breed"
                     value={field.value}
                     onChangeText={field.onChange}
-                    error={!!errors.breed as any}
+                    error={!!errors.breed}
                   />
                   {errors.breed && (
                     <Text style={{ color: 'red', fontSize: 12 }}>
@@ -172,8 +195,8 @@ export default function AddPetScreen() {
                     label="Age"
                     value={field.value}
                     onChangeText={field.onChange}
-                    error={!!errors.age as any}
                     keyboardType="numeric"
+                    error={!!errors.age}
                   />
                   {errors.age && (
                     <Text style={{ color: 'red', fontSize: 12 }}>
@@ -195,7 +218,7 @@ export default function AddPetScreen() {
                     value={field.value}
                     onChangeText={field.onChange}
                     keyboardType="numeric"
-                    error={!!errors.price as any}
+                    error={!!errors.price}
                   />
                   {errors.price && (
                     <Text style={{ color: 'red', fontSize: 12 }}>
