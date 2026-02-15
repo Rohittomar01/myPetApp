@@ -20,47 +20,37 @@ yarn start
 
 ## Step 2: Build and run your app
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android app:
 
 ### Android
 
+Prerequisites:
+
+- Ensure Android SDK, Android Studio, and an emulator or a connected Android device are set up. See: https://reactnative.dev/docs/environment-setup (select "React Native CLI" and follow Android setup).
+- Make sure ANDROID_HOME / PATH are configured so device/emulator can be detected.
+
+Install dependencies and run:
+
 ```sh
-# Using npm
+# Install JavaScript dependencies
+npm install
+# OR
+yarn
+
+# Start Metro (if you want to run it separately)
+npm start
+# OR
+yarn start
+
+# Build and run on Android (this will start Metro automatically)
 npm run android
-
-# OR using Yarn
-yarn android
+# OR (alternative)
+npx react-native run-android
 ```
 
-### iOS
+If everything is set up correctly, you should see your new app running in the Android Emulator or your connected device.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+This is one way to run your app — you can also build it directly from Android Studio.
 
 ## Step 3: Modify your app
 
@@ -71,7 +61,6 @@ Open `App.tsx` in your text editor of choice and make some changes. When you sav
 When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
 
 - **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
 ## Congratulations! :tada:
 
